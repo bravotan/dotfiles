@@ -6,7 +6,7 @@ print("Color indexes should be drawn in bold text of the same color.\n")
 
 colored = [0] + [0x5f + 40 * n for n in range(0, 5)]
 colored_palette = [
-	"%02x/%02x/%02x" % (r, g, b)
+	"{:02x}{:02x}{:02x}".format(r, g, b)
 	for r in colored
 	for g in colored
 	for b in colored
@@ -14,16 +14,15 @@ colored_palette = [
 
 grayscale = [0x08 + 10 * n for n in range(0, 24)]
 grayscale_palette = [
-	"%02x/%02x/%02x" % (a, a, a)
+	"{:02x}{:02x}{:02x}".format(a, a, a)
 	for a in grayscale
 ]
 
-normal = "\033[38;5;%sm"
-bold = "\033[1;38;5;%sm"
-reset = "\033[0m"
+normal = "\033[38;5;{}m{}\033[0m"
+bold = "\033[1;38;5;{}m{}\033[0m"
 
-for (i, color) in enumerate(colored_palette + grayscale_palette, 16):
-    index = (bold + "%4s" + reset) % (i, str(i) + ':')
-    hexa = (normal + "%s" + reset) % (i, color)
-    box = '{}\u2588{}'.format(bold % i, reset)
-    print(index, hexa, box, end=('\n' if i % 6 == 3 else ' '))
+for (i, rgb) in enumerate(colored_palette + grayscale_palette, 16):
+    index = bold.format(i, '{:>3}:'.format(i))
+    hexa = normal.format(i, rgb)
+    square = bold.format(i, '\u2588')
+    print(index, hexa, square, end=('\n' if i % 6 == 3 else '  '))
